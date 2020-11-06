@@ -1,11 +1,11 @@
 const fs = require("fs");
 const router = require("express").Router();
 const util = require("util");
-
+const {v4:uuidv4}= require("uuid")
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 router.get("/api/notes", (req, res) => {
-  readFile("../db/db.json", "utf8")
+  readFile("db/db.json", "utf8")
     .then((data) => {
       const notes = JSON.parse(data) || [];
       res.json(notes);
@@ -16,12 +16,13 @@ router.get("/api/notes", (req, res) => {
 });
 
 router.post("/api/notes", (req, res) => {
-  req.body;
-  readFile("../db/db.json", "utf8")
+  readFile("db/db.json", "utf8")
     .then((data) => {
       const notes = JSON.parse(data) || [];
+      const newNotes = req.body
+      newNotes.id = uuidv4()
       notes.push(req.body);
-      writeFile("../db/db.json", notes).then(() => {
+      writeFile("db/db.json", JSON.stringify(notes)).then(() => {
         res.json(notes);
       });
     })
@@ -29,3 +30,5 @@ router.post("/api/notes", (req, res) => {
       console.log(err);
     });
 });
+
+module.exports = router

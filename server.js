@@ -6,8 +6,10 @@ app.use(express.urlencoded({
   extended:true
 }))
 app.use(express.static("public"))
-app.use(require("./routes/apiRoutes"))
-app.use(require("./routes/htmlRoutes"))
+const apiRoutes = require("./routes/apiRoutes")
+const htmlRoutes = require("./routes/htmlRoutes")
+app.use(apiRoutes)
+app.use(htmlRoutes)
 
 
 
